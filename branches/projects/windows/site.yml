@@ -53,6 +53,7 @@
     win_template: src=cpp.j2 dest={{install_dir}}{{environment_name}}\install.properties
     with_items:
         - {build_destination: "{{build_destination}}", DOWNLOADARCHIVES: "{{DOWNLOADARCHIVES}}", EXTRACTARCHIVES: "{{EXTRACTARCHIVES}}", PROFILE: "{{PROFILE}}", CREATESERVER: "{{CREATESERVER}}", CONFIGURESERVER: "{{CONFIGURESERVER}}", DROPDATABASE: "{{DROPDATABASE}}", CREATEDATABASE: "{{CREATEDATABASE}}", POSTCREATEDATABASE: "{{POSTCREATEDATABASE}}", MIGRATEDATABASE: "{{MIGRATEDATABASE}}", EAR: "{{EAR}}", CONFIG: "{{CONFIG}}", COPYCONFIG: "{{COPYCONFIG}}", UI: "{{UI}}", COPYUI: "{{COPYUI}}", ASP: "{{ASP}}", IMPORTRESOURCES: "{{IMPORTRESOURCES}}", IMPORTRATES: "{{IMPORTRATES}}", GENERATEPROPERTIES: "{{GENERATEPROPERTIES}}", REFRESHPECONFIGINDEXES: "{{REFRESHPECONFIGINDEXES}}", CUSTOMISECLIENTRELEASEPACKAGE: "{{CUSTOMISECLIENTRELEASEPACKAGE}}"}
+    ignore_errors: yes
 
   - name: Extract InstallJ addon
     raw: 7z x {{install_dir}}{{environment_name}}\InstallJ-AddOn.zip  -o{{install_dir}}{{environment_name}} -y
