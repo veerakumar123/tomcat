@@ -1,13 +1,12 @@
 
 - name: Deploy select application
-- hosts: appservers
+  hosts: windows
   vars: 
-   environment_name: cpp_migration
-   install_dir: c:\koukia_build\
-   goals: install ALL
-   log_file: build
+     environment_name: cpp_migration
+     install_dir: c:\koukia_build\
+     goals: install ALL
+     log_file: build
   tasks:
-   -name: Create install dir
+  - name: Create install dir
     raw: mkdir {{install_dir}}\{{environment_name}}
-    register: c_dir
-   - debug: var=c_dir
+    
