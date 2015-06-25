@@ -1,0 +1,58 @@
+
+- name: Deploy select application
+  hosts: windows
+  gather_facts: False
+
+  vars: 
+     environment_name: cpp_migration
+     install_dir: c:\koukia_build\
+     goals: install ALL
+     log_file: build
+
+  tasks:
+
+  - name: Create install dir
+    raw: mkdir {{install_dir}}{{environment_name}}
+    ignore_errors: yes
+ 
+  - name: Check installjaddon exist   
+    win_stat: path={{install_dir}}{{environment_name}}\InstallJ-AddOn.zip
+    register: file_info
+    
+  - name: Download InstallJaddon
+    raw: wget  https://s3-us-west-2.amazonaws.com/aspireias/InstallJ-AddOn.zip -P {{install_dir}}{{environment_name}} --no-check-certificate
+    when: file_info.stat.exists == false
+
+
+  - name: Check installproperties exist
+    win_stat: path={{install_dir}}{{environment_name}}\install.properties
+    register: propfile_info
+
+  - name: Create Install Properties
+    win_template: src=cpp.j2 dest={{install_dir}}{{environment_name}}\install.properties
+    with_items:
+        - {DOWNLOADARCHIVES: true}
+        - {EXTRACTARCHIVES: true}
+        - {PROFILE: true}
+        - {CREATESERVER: true}
+        - {CONFIGURESERVER: true}
+        - {DROPDATABASE: true}
+        - {CREATEDATABASE: true}
+        - {POSTCREATEDATABASE: true}
+        - {MIGRATEDATABASE: true}
+        - {EAR: true}
+        - {CONFIG: true}
+        - {COPYCONFIG: true}
+        - {UI: true}
+        - {COPYUI: true}
+        - {ASP: true}
+        - {IMPORTRESOURCES: true}
+        - {IMPORTRATES: true}
+        - {GENERATEPROPERTIES: true}
+        - {REFRESHPECONFIGINDEXES: true}
+        - {CUSTOMISECLIENTRELEASEPACKAGE: true}
+
+  - name: Extract InstallJ addon
+    raw: 7z x {{install_dir}}{{environment_name}}\InstallJ-AddOn.zip  -o{{install_dir}}{{environment_name}} -y
+ # - name: Copy Koukia Config File
+     
