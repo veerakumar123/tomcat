@@ -31,3 +31,6 @@
   - name: Create Install Properties
     win_template: src=cpp.j2 dest={{install_dir}}\{{environment_name}}\install.properties
     when: propfile_info.stat.exists == false
+
+  - name: Extract InstallJ addon
+    raw: winrar x sonarqube-5.1.1.zip -Y
