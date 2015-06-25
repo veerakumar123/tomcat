@@ -1,0 +1,18 @@
+- hosts: 52.26.234.204
+  tasks:
+   - name: copy
+     copy: src=/var/lib/awx/projects/helloworld/lookup.yml  dest=/root/foo.yml owner=root group=root mode=0664
+     tags:
+      - copy
+ 
+   - name: sample script
+     shell: ./sample.sh
+
+     tags:
+     - samp
+   - name: list etc count
+     shell: chdir=/etc ls -l | wc -l
+     register: msg
+   - debug: print="{{msg.stdout}}"
+     tags:
+     - count
