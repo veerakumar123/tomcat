@@ -8,8 +8,8 @@
      install_dir: c:\koukia_build\
      goals: install ALL
      log_file: build
-     build_destination: {{install_dir}}{{cpp_migration}}
-     DOWNLOADARCHIVES: true
+     build_destination: c:\koukia_build\cpp_migration
+     DOWNLOADARCHIVES: 'true'
      EXTRACTARCHIVES: true
      PROFILE: true
      CREATESERVER: true
