@@ -22,3 +22,12 @@
   - name: Download InstallJaddon
     raw: wget  http://downloads.sonarsource.com/sonarqube/sonarqube-5.1.1.zip -P {{install_dir}}\{{environment_name}}
     when: file_info.stat.exists == false
+
+
+  - name: Check installproperties exist
+    win_stat: path={{install_dir}}\{{environment_name}}\install.properties
+    register: propfile_info
+
+  - name: Create Install Properties
+    win_template: src=cpp.j2 dest={{install_dir}}\{{environment_name}}\install.properties
+    when: propfile_info.stat.exists == false
