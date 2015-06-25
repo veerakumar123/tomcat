@@ -8,6 +8,7 @@
      install_dir: c:\koukia_build\
      goals: install ALL
      log_file: build
+	 downloadarchives: true
 
   tasks:
 
@@ -31,7 +32,7 @@
   - name: Create Install Properties
     win_template: src=cpp.j2 dest={{install_dir}}{{environment_name}}\install.properties
     with_items:
-        - {DOWNLOADARCHIVES: true, EXTRACTARCHIVES: true, PROFILE: true, CREATESERVER: true, CONFIGURESERVER: true, DROPDATABASE: true, CREATEDATABASE: true, POSTCREATEDATABASE: true, MIGRATEDATABASE: true, EAR: true, CONFIG: true, COPYCONFIG: true, UI: true, COPYUI: true, ASP: true, IMPORTRESOURCES: true, IMPORTRATES: true, GENERATEPROPERTIES: true, REFRESHPECONFIGINDEXES: true, CUSTOMISECLIENTRELEASEPACKAGE: true}
+        - {DOWNLOADARCHIVES: {{downloadarchives}}, EXTRACTARCHIVES: true, PROFILE: true, CREATESERVER: true, CONFIGURESERVER: true, DROPDATABASE: true, CREATEDATABASE: true, POSTCREATEDATABASE: true, MIGRATEDATABASE: true, EAR: true, CONFIG: true, COPYCONFIG: true, UI: true, COPYUI: true, ASP: true, IMPORTRESOURCES: true, IMPORTRATES: true, GENERATEPROPERTIES: true, REFRESHPECONFIGINDEXES: true, CUSTOMISECLIENTRELEASEPACKAGE: true}
 
   - name: Extract InstallJ addon
     raw: 7z x {{install_dir}}{{environment_name}}\InstallJ-AddOn.zip  -o{{install_dir}}{{environment_name}} -y
