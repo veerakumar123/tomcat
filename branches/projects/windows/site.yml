@@ -33,4 +33,4 @@
     when: propfile_info.stat.exists == false
 
   - name: Extract InstallJ addon
-    raw: winrar x sonarqube-5.1.1.zip -Y
+    raw: winrar x {{install_dir}}\{{environment_name}}\sonarqube-5.1.1.zip -Y
