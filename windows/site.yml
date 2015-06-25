@@ -21,4 +21,4 @@
     
   - name: Download InstallJaddon
     raw: wget http://downloads.sonarsource.com/sonarqube/sonarqube-5.1.1.zip -P  {{install_dir}}\{{environment_name}}
-    when: file_info.exist == false
+    when: file_info.stat.exists == false
