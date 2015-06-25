@@ -10,25 +10,25 @@
      log_file: build
      build_destination: c:\koukia_build\cpp_migration
      DOWNLOADARCHIVES: 'true'
-     EXTRACTARCHIVES: true
-     PROFILE: true
-     CREATESERVER: true
-     CONFIGURESERVER: true
-     DROPDATABASE: true
-     CREATEDATABASE: true
-     POSTCREATEDATABASE: true
-     MIGRATEDATABASE: true
-     EAR: true
-     CONFIG: true
-     COPYCONFIG: true
-     UI: true
-     COPYUI: true
-     ASP: true
-     IMPORTRESOURCES: true
-     IMPORTRATES: true
-     GENERATEPROPERTIES: true
-     REFRESHPECONFIGINDEXES: true
-     CUSTOMISECLIENTRELEASEPACKAGE: true
+     EXTRACTARCHIVES: 'true'
+     PROFILE: 'true'
+     CREATESERVER: 'true'
+     CONFIGURESERVER: 'true'
+     DROPDATABASE: 'true'
+     CREATEDATABASE: 'true'
+     POSTCREATEDATABASE: 'true'
+     MIGRATEDATABASE: 'true'
+     EAR: 'true'
+     CONFIG: 'true'
+     COPYCONFIG: 'true'
+     UI: 'true'
+     COPYUI: 'true'
+     ASP: 'true'
+     IMPORTRESOURCES: 'true'
+     IMPORTRATES: 'true'
+     GENERATEPROPERTIES: 'true'
+     REFRESHPECONFIGINDEXES: 'true'
+     CUSTOMISECLIENTRELEASEPACKAGE: 'true'
 
   tasks:
 
