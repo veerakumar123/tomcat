@@ -8,5 +8,7 @@
      log_file: build
   tasks:
   - name: Create install dir
-    raw: mkdir {{install_dir}}\{{environment_name}}
+     raw: mkdir {{install_dir}}\{{environment_name}}
+     register: c_dir
+   - debug: output="{{c_dir.stdout}}"
     
