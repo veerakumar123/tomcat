@@ -1,0 +1,23 @@
+- hosts: 52.26.24.58
+  vars:
+    var1: 20
+    var2: 22
+  tasks:
+   - name: copy
+     copy: src=/var/lib/awx/projects/helloworld/lookup.yml  dest=/root/foo.yml owner=root group=root mode=0664
+     tags:
+      - copy
+ 
+   - name: sample script
+     shell: ./sample.sh
+
+     tags:
+     - samp
+   - name: list etc count
+     shell: ls -l | wc -l
+     register: msg
+   - debug: print="{{msg.stdout}}"
+     tags:
+     - count
+   - name: test var
+     shell: echo var1=100/{{var1}}

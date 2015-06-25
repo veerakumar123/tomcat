@@ -1,0 +1,7 @@
+---
+- name: Hello World!
+  hosts: 52.26.234.204
+  remote_user: root
+  tasks:
+  - name: Hello World!
+    shell: echo "Hi! Tower is working"
