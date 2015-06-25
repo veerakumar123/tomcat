@@ -1,0 +1,93 @@
+
+#### jenkins url or local folder url
+core.archives.location=http://guijenkins.siriusfs.com/job/Core%20-%20B_CPP_Migration/lastSuccessfulBuild/artifact/insurej/Assemblies/target/
+#### zip files to download in order; separated by ';'
+core.archives.names=InsureJ-Core.zip;InsureJ-License_Developer.zip;InsureJ-Territory_GB.zip;InsureJ-Sample_Generic.zip;InsureJ-Sample_DocStorageFS.zip;InsureJ-Sample_Reports.zip
+#### jenkins url or local folder url for client build
+client.archives.location=http://guijenkins.siriusfs.com/job/CPP%20-%20B_CPP_Migration/lastSuccessfulBuild/artifact/insurej/target/
+# client.archives.location=file:///E:/koukia_sdk_Sales/target
+#### zip files to download in order; separated by ';'
+client.archives.names=Select-CPP-Injection.zip
+#Select-cpp-license.zip;Select-cpp-ssp-encryption.zip;Select-cpp-ssp-injection.zip;Select-cpp-ssp-installation.zip
+
+#### jenkins url or local folder url for migration upgrade download
+core.upgrade.location=http://guijenkins/job/Core%20-%20B_CPP_Migration/lastSuccessfulBuild/artifact/insurej/Migration/target/
+#### upgrade/migration zip files to download in order; separated by ';' 
+core.upgrade.names=InsureJ-Core_UpgradeKit.zip
+
+#### jenkins url or local folder url for migration upgrade download
+#client.upgrade.location=http://guijenkins/job/Core%20-%20B_CPP_Migration/lastSuccessfulBuild/artifact/insurej/Migration/target/
+# client.upgrade.location=file:///E:/koukia_sdk_Sales/Migration/target/
+#### upgrade/migration zip files to download in order; separated by ';' 
+#client.upgrade.names=Select-LG_UpgradeKit.zip
+
+#### unzip location or build destination - files will be extracted in build.destination + "install/setup/" folder
+build.destination=C:/koukia_build/CPP/
+
+#### username and password needed to import resources and rates and refresh pe indexes - Select user to login to the system
+user=sysadmin
+password=Passw0rd
+#### specify the target territory needed to determine which database and resources quick lists to use
+territory=GB
+#### set to false for older releases where servlets need to be called on the appserver directly
+callAppServerDirectly=false
+#### rates xml location must end with /
+#### all rate table files must end with "_TABLE.XML"
+#### all other files in the folder will be assumed to be rates files
+ratesFolder=C:/koukia_build/CPP/Upgrade/Scripts/ratesLG/
+
+#### if creating customised package for the client, specify output folder (can be shared drive). - Keep this false on LGNightly build
+customisedPackageOutputFolder=C:/koukia_build/CPP/CPPRelease/
+
+################################################################################################
+###### Flags to turn off InstallJ INSTALL ALL goals (un-comment GOAL=true to turn it off) #####
+###### WARNING : All commented out goals default to true                                   #####
+################################################################################################
+DOWNLOADARCHIVES=true
+EXTRACTARCHIVES=true
+PROFILE=true
+CREATESERVER=true
+CONFIGURESERVER=true
+DROPDATABASE=true
+CREATEDATABASE=true
+POSTCREATEDATABASE=true
+MIGRATEDATABASE=true
+EAR=true
+CONFIG=true
+COPYCONFIG=true
+UI=true
+COPYUI=true
+ASP=true
+IMPORTRESOURCES=true
+IMPORTRATES=true
+GENERATEPROPERTIES=true
+REFRESHPECONFIGINDEXES=true
+CUSTOMISECLIENTRELEASEPACKAGE=true
+
+################################################################################################
+###### Description of InstallJ INSTALL ALL goals ###############################################
+################################################################################################
+#### DOWNLOADARCHIVES : downloading of archives/zips from archives location above
+#### EXTRACTARCHIVES : extraction of archives/zips from archives location above
+#### PROFILE : profile creation
+#### CREATESERVER : server creation - only creates server and allocates port numbers
+#### CONFIGURESERVER : server configuration - configures server - sib, data sources, queues 
+#### DROPDATABASE : drop database
+#### CREATEDATABASE : create database
+#### POSTCREATEDATABASE : import baseline data into database, run statistics
+#### MIGRATEDATABASE : run database migration scripts
+####      migration scripts will be run according to the quick lists
+####      in the Upgrade/Tools folder and the value of the territory property above
+#### EAR : install/re-install ear
+#### CONFIG : generate configuration files
+#### COPYCONFIG : copy the generated configuration files to server directory
+#### UI : build UI files into correct folder structure
+#### COPYUI : copy the generated UI files to the server directory
+#### ASP : asp generation and copy to server directory
+#### IMPORTRESOURCES : run Resource migration scripts
+####      Resource migration scripts will be run according to the quick lists
+####      in the Upgrade/Tools folder and the value of the territory property above
+#### IMPORTRATES : import rates from ratesFolder defined above
+#### GENERATEPROPERTIES : this target currently doesn't do anything
+#### REFRESHPECONFIGINDEXES : refresh the process config indexes
+
