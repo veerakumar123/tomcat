@@ -14,13 +14,11 @@
   - name: Create install dir
     raw: mkdir {{install_dir}}\{{environment_name}}
     ignore_errors: yes
-
-  - name: Download InstallJaddon
-    raw: wget http://downloads.sonarsource.com/sonarqube/sonarqube-5.1.1.zip -P  {{install_dir}}\{{environment_name}}
-
+ 
   - name: Check installjaddon exist   
     win_stat: path={{install_dir}}\{{environment_name}}\sonarqube-5.1.1.zip
     register: file_info
-  - debug: var=file_info
-   
     
+  - name: Download InstallJaddon
+    raw: wget http://downloads.sonarsource.com/sonarqube/sonarqube-5.1.1.zip -P  {{install_dir}}\{{environment_name}}
+    when: file_info.exist == false
