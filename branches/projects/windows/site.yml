@@ -9,7 +9,13 @@
      goals: install ALL
      log_file: build
      build_destination: c:\koukia_build\cpp_migration
-     DOWNLOADARCHIVES: 'true'
+	 db_server_hostname: localhost
+	 DB_OS: WIN
+	 OP_DB: OPCPPVN
+	 EX_DB: EXCPPVN
+	 DB_USER: venkat
+	 DB_PASSWORD: Temp01
+	 DOWNLOADARCHIVES: 'true'
      EXTRACTARCHIVES: 'true'
      PROFILE: 'true'
      CREATESERVER: 'true'
@@ -57,5 +63,10 @@
 
   - name: Extract InstallJ addon
     raw: 7z x {{install_dir}}{{environment_name}}\InstallJ-AddOn.zip  -o{{install_dir}}{{environment_name}} -y
- # - name: Copy Koukia Config File
+ 
+ - name: Copy Koukia Config File
+ win_template: src=KoukiaDeployment.config.j2 dest={{install_dir}}{{environment_name}}\KoukiaDeployment.config
+    with_items:
+	- {env: {{environment_name}}, dbhost: {{db_server_hostname}}, dbos: {{DB_OS}}, dbuser: {{DB_USER}}, dbpassword: {{DB_PASSWORD}}, opdb: {{OP_DB}}, exdb: {{EX_DB}}}
+ 
      
