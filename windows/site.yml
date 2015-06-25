@@ -30,42 +30,29 @@
 
   - name: Create Install Properties
     win_template: src=cpp.j2 dest={{install_dir}}{{environment_name}}\install.properties
-	with_items:
-	 - {DOWNLOADARCHIVES.enabled: true}
-	 - {EXTRACTARCHIVES.enabled: true}
-	 - {PROFILE.enabled: true}
-	 - {CREATESERVER.enabled: true}
-	 - {CONFIGURESERVER.enabled: true}
-	 - {DROPDATABASE.enabled: true}
-	 - {CREATEDATABASE.enabled: true}
-	 - {POSTCREATEDATABASE.enabled: true}
-	 - {MIGRATEDATABASE.enabled: true}
-	 - {EAR.enabled: true}
-	 - {CONFIG.enabled: true}
-	 - {COPYCONFIG.enabled: true}
-	 - {UI.enabled: true}
-	 - {COPYUI.enabled: true}
-	 - {ASP.enabled: true}
-	 - {IMPORTRESOURCES.enabled: true}
-	 - {IMPORTRATES.enabled: true}
-	 - {GENERATEPROPERTIES.enabled: true}
-	 - {REFRESHPECONFIGINDEXES.enabled: true}
-	 - {CUSTOMISECLIENTRELEASEPACKAGE.enabled: true}
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-    when: propfile_info.stat.exists == false
+    with_items:
+        - {DOWNLOADARCHIVES.enabled: true}
+        - {EXTRACTARCHIVES.enabled: true}
+        - {PROFILE.enabled: true}
+        - {CREATESERVER.enabled: true}
+        - {CONFIGURESERVER.enabled: true}
+        - {DROPDATABASE.enabled: true}
+        - {CREATEDATABASE.enabled: true}
+        - {POSTCREATEDATABASE.enabled: true}
+        - {MIGRATEDATABASE.enabled: true}
+        - {EAR.enabled: true}
+        - {CONFIG.enabled: true}
+        - {COPYCONFIG.enabled: true}
+        - {UI.enabled: true}
+        - {COPYUI.enabled: true}
+        - {ASP.enabled: true}
+        - {IMPORTRESOURCES.enabled: true}
+        - {IMPORTRATES.enabled: true}
+        - {GENERATEPROPERTIES.enabled: true}
+        - {REFRESHPECONFIGINDEXES.enabled: true}
+        - {CUSTOMISECLIENTRELEASEPACKAGE.enabled: true}
 
   - name: Extract InstallJ addon
     raw: 7z x {{install_dir}}{{environment_name}}\InstallJ-AddOn.zip  -o{{install_dir}}{{environment_name}} -y
-  - name: Copy Koukia Config File
+ # - name: Copy Koukia Config File
      
