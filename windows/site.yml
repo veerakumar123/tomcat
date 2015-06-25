@@ -1,6 +1,7 @@
 
 - name: Deploy select application
   hosts: windows
+  gather_facts: False
   vars: 
      environment_name: cpp_migration
      install_dir: c:\koukia_build\
@@ -8,7 +9,7 @@
      log_file: build
   tasks:
   - name: Create install dir
-     raw: mkdir {{install_dir}}\{{environment_name}}
-     register: c_dir
-   - debug: output="{{c_dir.stdout}}"
+    raw: mkdir {{install_dir}}\{{environment_name}}
+    ignore_errors: yes
+    register: c_dir
     
