@@ -8,26 +8,7 @@
      install_dir: c:\koukia_build\
      goals: install ALL
      log_file: build
-DOWNLOADARCHIVES.enabled
-EXTRACTARCHIVES.enabled
-PROFILE.enabled
-CREATESERVER.enabled
-CONFIGURESERVER.enabled
-DROPDATABASE.enabled
-CREATEDATABASE.enabled
-POSTCREATEDATABASE.enabled
-MIGRATEDATABASE.enabled
-EAR.enabled
-CONFIG.enabled
-COPYCONFIG.enabled
-UI.enabled
-COPYUI.enabled
-ASP.enabled
-IMPORTRESOURCES.enabled
-IMPORTRATES.enabled
-GENERATEPROPERTIES.enabled
-REFRESHPECONFIGINDEXES.enabled
-CUSTOMISECLIENTRELEASEPACKAGE.enabled 
+
   tasks:
 
   - name: Create install dir
@@ -50,7 +31,38 @@ CUSTOMISECLIENTRELEASEPACKAGE.enabled
   - name: Create Install Properties
     win_template: src=cpp.j2 dest={{install_dir}}{{environment_name}}\install.properties
 	with_items:
-	-{UI.enabled: true}
+	 - {DOWNLOADARCHIVES.enabled: true}
+	 - {EXTRACTARCHIVES.enabled: true}
+	 - {PROFILE.enabled: true}
+	 - {CREATESERVER.enabled: true}
+	 - {CONFIGURESERVER.enabled: true}
+	 - {DROPDATABASE.enabled: true}
+	 - {CREATEDATABASE.enabled: true}
+	 - {POSTCREATEDATABASE.enabled: true}
+	 - {MIGRATEDATABASE.enabled: true}
+	 - {EAR.enabled: true}
+	 - {CONFIG.enabled: true}
+	 - {COPYCONFIG.enabled: true}
+	 - {UI.enabled: true}
+	 - {COPYUI.enabled: true}
+	 - {ASP.enabled: true}
+	 - {IMPORTRESOURCES.enabled: true}
+	 - {IMPORTRATES.enabled: true}
+	 - {GENERATEPROPERTIES.enabled: true}
+	 - {REFRESHPECONFIGINDEXES.enabled: true}
+	 - {CUSTOMISECLIENTRELEASEPACKAGE.enabled: true}
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
     when: propfile_info.stat.exists == false
 
   - name: Extract InstallJ addon
