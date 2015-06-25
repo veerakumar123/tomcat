@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config formatVersion="2.2.2">
+	<!-- 	Replace xxxx with your value.
+			Everything else should be correct for a default internal koukia development environment -->
+   <product
+	   	version="3.0.0_1.0.0RC4"
+	   	build="2.2.11"
+		windowsDriveLetter="C:"
+	   	installRootDir="/koukia_systems/{{item.env}}">
+		<!-- Component specific configuration. -->
+		<SOAComponents>
+			<component name="Attachments" info="attachments component" install="true">
+				<property name="eMailFromAddress" value="nobody@ssp-worldwide.com" />
+			</component>
+			<component name="ProcessEngine" info="attachments component" install="true">
+				<property name="ProcessAdministratorEmail" value="nobody@ssp-worldwide.com" />
+				<property name="ProcessAdministratorSendersEmail" value="processengine@ssp-worldwide.com"/>
+			</component>
+			<!-- DVLA is mutually exclusive only one should have install equal to true -->
+			<component name="DVLA" info="Stub for Testing" install="true">
+				<property name="dvlaLookUpServlet" value="DVLATestServlet" />
+				<property name="WebContext" value="DVLATestWeb" />
+			</component>
+   			<component name="DVLA" info="Expiaron Wrapper" install="false">
+				<property name="dvlaLookUpServlet" value="VehicleLookupServlet" />
+				<property name="WebContext" value="InsureJUKVehicleLookupWeb" />
+			</component>
+   			<component name="QAS" info="QAS Live Wrapper" install="true">
+				<property name="QASServerProtocol" value="http" />
+				<property name="QASServerName" value="$[was.appSrvProfile.hostName]" />
+				<property name="QASPort" value="9081" />
+				<property name="QASWebContext" value="InsureJQASWeb" />
+				<property name="QASjspName" value="insureJQASRapidInit.jsp" />
+			</component>
+   			<component name="Resources_PostCodeExtensions_GB" info="UK postcode extension" install="true">
+				<property name="WebContext" value="InsureJUKPostcodesWARModule" />
+			</component>
+   			<component name="Resources_PostCodeExtensions_EUR" info="EUR postcode extension" install="true">
+				<property name="WebContext" value="ResourcesWeb_EUR" />
+			</component>			
+			<component name="BankWizard" info="BankWizard" install="true">
+				<property name="HostName" value="frnjdemo.ssp.local" />
+				<property name="HTTPPort" value="9083" />
+			</component>
+			<component name="SampleLocalFSDocStorage" info="Sample Local File System Document Storage" install="true">
+				<!-- FOR SSP SAMPLE SOLUTION ONLY AS A STUB. -->
+				<property name="CopyToPath" value="koukia_systems/{{item.env}}/DocStorage" />
+				<property name="AbsolutePath" value="C:/koukia_systems/{{item.env}}/DocStorage" />
+			</component>
+   			<component name="Workflow">
+   				<property name="runScheduledWorkItems" value="1" />
+				<property name="WorkiItemEmailFrom" value="xxxx"/>
+				<property name="WorkiItemEmailTo" value="xxxx"/>
+   			</component>
+   			<component name="BankValidationService" info="LG Bank Account Validation Service" install="true">
+				<property name="BankValidationServiceURL" value="http://guivmtomcat01.siriusfs.com/BankValidation"/>
+			</component>   			
+			<component name="ProcessTracker">
+   				<property name="startJobConnectionFactory" value="jms/ConnectionFactory" />
+				<property name="stopJobQueueJNDIName" value="queue:///StopJobQueue" />
+   			</component>
+   			<component name="ENPTWebService" info="ENPT Web Service" install="true">
+				<property name="url" value="http://GUIVMGDB02.siriusfs.com:9080/BankValidationWeb/bankValidation.htm?ID=A"/>
+				<property name="operation" value="doGet"/>
+			</component>
+			<component name="SelectConnectService" info="Select Connect Services" install="true">
+				<property name="SelectConnectServiceURL" value="http://guivmstap03:9080"/>
+			</component>
+			<component name="QuotesHub" info="Select Connect Services" install="true">
+				<property name="ModularQuotesHubServiceURL" value="http://sspecdr05/mqh.test/mqh/soap/legalandgeneral/quotation"/>
+			</component>
+   		</SOAComponents>
+    </product>
+	<websphere installRoot="C:/sspsdk/IBM/WebSphere/AppServer"
+		profileInstallDir="C:/koukia_systems/was85profiles"
+		appSrvProfileName="{{item.env}}" 
+		websphereVersion="8.0"  /> <!-- version supported are 6.1 and 7.0 -->
+	
+	<databaseConfig>
+		<db2 windowsDriveLetter="C"
+			databaseInstallRoot="\koukia_systems\databases"
+			db2InstanceName="DB2"
+			db2OperatingSystemType="{{item.dbos}}" 
+			db2ServerName="{{item.dbhost}}" 
+			db2Compression="false" 
+			default="true" ><!-- if using DB2 set to true otherwise set to false -->
+
+			<jdbcProvider name="DB2 Universal JDBC Driver Provider (XA)" 
+						  type="DB2 Universal JDBC Driver Provider (XA)" 
+						  db2RuntimeLibrariesLocation="C:/Program Files/IBM/SQLLIB/java" 
+						  implmentationClassName="com.ibm.db2.jcc.DB2XADataSource" 
+						  jdbcDriverType="4" 
+						  description="InsureJ DB2 JDBC Provider" 
+						  isXA="true" />
+		</db2>
+		<oracle windowsDriveLetter="C"
+			OracleInstall="C:\ORACLE"
+			OracleHome="C:\ORACLE\product\11.2.0\dbhome_1"
+			ConfigLocation="C:\koukia_build\xxxx\install\setup\data\oracle_setup\conf"
+			ConfigLocationExternal="C:\koukia_build\xxxx\install\setup\data\oracle_setup\conf\External"
+			Domain="siriusfs"
+			Territory="United Kingdom"
+			databaseInstallRoot="\koukia_systems\databases"
+			oracleOperatingSystemType="WIN" 
+			oracleServerName="xxxx"
+			default="false" > <!-- if using Oracle set to true otherwise set to false -->
+			
+			<jdbcProvider name="InsureJ Oracle JDBC Provider" 
+						  type="Oracle JDBC Driver (XA)" 
+						  oracleRuntimeLibrariesLocation="C:/ORACLE/product/11.2.0/dbhome_1/jdbc/lib" 
+						  implmentationClassName="oracle.jdbc.xa.client.OracleXADataSource" 
+						  description="InsureJ Oracle JDBC Provider"
+						  isXA="true" />
+		</oracle>
+	</databaseConfig>
+	<IHSServer 
+		name="webserver1"
+		nodeName="$[was.appSrvProfile.nodeName]"
+   		template="IHS"
+   		installDir="C:/sspsdk/IBM/HTTPServer"
+		pluginsInstallDir="C:/sspsdk/IBM/HTTPServer/Plugins"
+		configFile="C:/sspsdk/IBM/HTTPServer/conf/httpd.conf"
+		operatingSystem="windows"
+		httpAdminPort = "8008" />
+	
+	<server 
+		name="server1"
+	   	isDevelopment="true"
+	   	host-name="$[was.appSrvProfile.hostName]"
+		host-address="$[was.appSrvProfile.hostName]"
+		bootPort="$[was.appSrvProfile.port.bootstrap]"
+		soapPort="$[was.appSrvProfile.port.soap]"
+		httpPort="$[was.appSrvProfile.port.http]" 
+		httpsPort="$[was.appSrvProfile.port.https]" 
+		cell-name="$[was.depMgrProfile.cellName]"
+		node-name="$[was.appSrvProfile.nodeName]"
+		virtualHost="$[was.server.name]_VH"
+		jvmInitialHeapSize="1024"
+		jvmMaximumHeapSize="2048"
+		protocol="http">
+	</server>
+	
+    <webserver 
+   		protocol="http" 
+	   	host-name="$[was.appSrvProfile.hostName]"
+		host-address="$[was.appSrvProfile.hostName]"
+   		httpPort="82" 
+   		sourceDir="/{{item.env}}"
+   		env-context="Server" 
+   		environmentID="{{item.env}}"
+   		local="true"/>
+   		
+	<docserver host-name="crysrv1" host-address="crysrv1.koukia.com" httpPort="9291" krdbDir="devSupportKrdb" krdbDatasource="NA" docDir="devSupportDocstorage"/>
+	<aspserver host-name="crysrv1" host-address="crysrv1.koukia.com" httpPort="9291"/>
+	<mailserver hostname="changer" smtpPort="25"/>
+
+   <ldapserver 
+   		host-name="" 
+   		port="389" 
+   		baseDN="" 
+   		adminDN="" 
+   		adminPassword="" />
+   <LoginModule 
+   		name="SimpleLoginModule" 
+   		class="com.koukia.auth.simple.modules.KoukiaSimplePasswordLoginModule"
+   		passwordHandlerClass="com.koukia.base.authentication.password.handler.domain.simple.SimplePasswordHandler" 
+   		passwordHandlerEnable="true"
+   		default="true"/> 
+   <LoginModule 
+   		name="LDAPModule" 
+   		class="com.koukia.auth.ldap.modules.KoukiaLDAPLoginModule"
+   		passwordHandlerClass="com.koukia.base.authentication.password.handler.domain.ldap.LDAPPasswordHandler" 
+   		passwordHandlerEnable="false"
+   		default="false"/>   
+   <resource >
+		<db id="KOUKIADS" name="{{item.opdb}}" username="{{item.dbuser}}" password="{{item.dbpassword}}" authDataAlias="koukiaDSUser" dataSourceName="KoukiaDS" dataSourceJndiName="jdbc/KoukiaDS" connectionFactoryName="KoukiaDS_CF" connectionFactoryJndiName="eis/jdbc/KoukiaDS_CMP" >
+			<wasPerformanceTuneDB2 
+				dataSourceDescription="InsureJ DB2 Data Source"
+				statementCacheSize="200"
+				category="Koukia"
+				agedTimeout="0"
+				connectionTimeout="1800"
+				maxConnection="180"
+				minConnection="50"
+				reapTime="180"
+				unusedTimeout="1800"
+				purgePolicy="FailingConnectionOnly"
+				authPref="BASIC_PASSWORD" 
+				configAlias="DefaultPrincipalMapping" 
+				websphereIsolationLevel="2"
+				loginTimeout="0" 
+				schema="KOUKIA"
+				port ="50000"
+				dataStoreHelperClassName="com.ibm.websphere.rsadapter.DB2UniversalDataStoreHelper" />
+				<wasPerformanceTuneOracle 
+				dataSourceDescription="InsureJ Oracle Data Source"
+				statementCacheSize="200"
+				category="Koukia"
+				agedTimeout="0"
+				connectionTimeout="1800"
+				maxConnection="180"
+				minConnection="50"
+				reapTime="180"
+				unusedTimeout="1800"
+				purgePolicy="FailingConnectionOnly"
+				loginTimeout="0"
+				authPref="BASIC_PASSWORD" 
+				configAlias="DefaultPrincipalMapping" 
+				oracleSYSPassword="password" 
+				oracleSYSTEMPassword="password"  
+				port ="1521"
+				dataStoreHelperClassName= "com.ibm.websphere.rsadapter.Oracle11gDataStoreHelper"/>
+		</db>
+		<db id="KSFRDS" name="{{item.exdb}}" username="{{item.dbuser}}" password="{{item.dbpassword}}" authDataAlias="ksfrDSUser" dataSourceName="KSFRDS" dataSourceJndiName="jdbc/KSFRDS" connectionFactoryName="KSFRDS_CF" connectionFactoryJndiName="eis/jdbc/KSFRDS_CMP">
+			<wasPerformanceTuneDB2 
+				dataSourceDescription="Koukia Data Source"
+				statementCacheSize="200"
+				category="Koukia"
+				agedTimeout="0"
+				connectionTimeout="180"
+				maxConnection="50"
+				minConnection="10"
+				reapTime="180"
+				unusedTimeout="1800"
+				purgePolicy="FailingConnectionOnly"
+				authPref="BASIC_PASSWORD" 
+				configAlias="DefaultPrincipalMapping"
+				websphereIsolationLevel="2"
+				port ="50000"
+				schema="KOUKIA"
+				loginTimeout="0"
+				dataStoreHelperClassName="com.ibm.websphere.rsadapter.DB2UniversalDataStoreHelper" />
+				<wasPerformanceTuneOracle 
+				dataSourceDescription="InsureJ Data Source"
+				statementCacheSize="200"
+				category="Koukia"
+				agedTimeout="0"
+				connectionTimeout="180"
+				maxConnection="50"
+				minConnection="10"
+				reapTime="180"
+				unusedTimeout="1800"
+				purgePolicy="FailingConnectionOnly"
+				loginTimeout="0" 
+				authPref="BASIC_PASSWORD" 
+				configAlias="DefaultPrincipalMapping" 
+				oracleSYSPassword="password" 
+				oracleSYSTEMPassword="password"  
+				port ="1521"
+				dataStoreHelperClassName= "com.ibm.websphere.rsadapter.Oracle11gDataStoreHelper"/>
+		</db>
+		<db id="KIPMDS" name="{{item.exdb}}" username="{{item.dbuser}}" password="{{item.dbpassword}}" authDataAlias="kipmUser" dataSourceName="KIPMDS" dataSourceJndiName="jdbc/KIPMDS" connectionFactoryName="KIPMDS_CF" connectionFactoryJndiName="eis/jdbc/KIPMDS_CMP">
+			<wasPerformanceTuneDB2 
+				dataSourceDescription="Koukia Data Source"
+				statementCacheSize="200"
+				category="Koukia"
+				agedTimeout="0"
+				connectionTimeout="180"
+				maxConnection="50"
+				minConnection="10"
+				reapTime="180"
+				unusedTimeout="1800"
+				purgePolicy="FailingConnectionOnly"
+				authPref="BASIC_PASSWORD" 
+				configAlias="DefaultPrincipalMapping"
+				websphereIsolationLevel="2"
+				port ="50000"
+				schema="KIPM"
+				loginTimeout="0"
+				dataStoreHelperClassName="com.ibm.websphere.rsadapter.DB2UniversalDataStoreHelper" />
+				<wasPerformanceTuneOracle 
+				dataSourceDescription="InsureJ Data Source"
+				statementCacheSize="200"
+				category="Koukia"
+				agedTimeout="0"
+				connectionTimeout="180"
+				maxConnection="50"
+				minConnection="10"
+				reapTime="180"
+				unusedTimeout="1800"
+				purgePolicy="FailingConnectionOnly"
+				loginTimeout="0" 
+				authPref="BASIC_PASSWORD" 
+				configAlias="DefaultPrincipalMapping" 
+				oracleSYSPassword="password" 
+				oracleSYSTEMPassword="password"  
+				port ="1521"
+				dataStoreHelperClassName= "com.ibm.websphere.rsadapter.Oracle11gDataStoreHelper"/>
+		</db>
+	<sib name="{{item.env}}_BUS" >
+		<jmsQueue name="BackgroundLoggingQueue"  jndiName="queue/BackgroundLoggingQueue" activationSpecName="BackgroundLoggingActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ClaimsReinsuranceQueue"  jndiName="queue/ClaimsReinsuranceQueue" activationSpecName="ClaimsReinsuranceActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="DataExportMaintenanceQueue"  jndiName="queue/DataExportMaintenanceQueue" activationSpecName="DataExportMaintenanceActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="FinanceQueue"  jndiName="queue/FinanceQueue" activationSpecName="FinancialTransactionActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="HtmlPostQueue"  jndiName="queue/HtmlPostQueue" activationSpecName="HtmlPostProcessActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="KRDBDataQueue"  jndiName="queue/KRDBDataQueue" activationSpecName="KRDBDataActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="KoukiaEmailQueue"  jndiName="queue/KoukiaEmailQueue" activationSpecName="EmailActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="KoukiaLogQueue"  jndiName="queue/KoukiaLogQueue" activationSpecName="KoukiaLoggingActivationSpec" factoryJndiName="jms/ConnectionFactory"  activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="KoukiaPrintQueue"  jndiName="queue/KoukiaPrintQueue" activationSpecName="PrintingActivationSpec" factoryJndiName="jms/ConnectionFactory"  activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ProcessEngineImmediateQueue"  jndiName="queue/ProcessEngineImmediateQueue" activationSpecName="ProcessEngineImmediateActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ProcessEngineLaterQueue"  jndiName="queue/ProcessEngineLaterQueue" activationSpecName="ProcessEngineLaterActivationSpec" factoryJndiName="jms/ConnectionFactory"  activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ProcessEngineQueue"  jndiName="queue/ProcessEngineQueue" activationSpecName="ProcessEngineActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ProcessEngineStateQueue"  jndiName="queue/ProcessEngineStateQueue" activationSpecName="ProcessEngineStateActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ProcessEngineTaskUpdateQueue"  jndiName="queue/ProcessEngineTaskUpdateQueue" activationSpecName="TaskUpdateActivationSpec" factoryJndiName="jms/ConnectionFactory"  activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ProcessMaintenanceQueue"  jndiName="queue/ProcessMaintenanceQueue" activationSpecName="ProcessMaintenanceActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ProcessMaintenanceTestQueue" jndiName="queue/ProcessMaintenanceTestQueue" activationSpecName="ProcessMaintenanceTestActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ReinsuranceAcceptQueue"  jndiName="queue/ReinsuranceAcceptQueue" activationSpecName="ReinsuranceAcceptActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ReinsuranceValidateQueue"  jndiName="queue/ReinsuranceValidateQueue" activationSpecName="ReinsuranceValidateActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="SchedulerQueue"  jndiName="queue/SchedulerQueue" activationSpecName="SchedulerActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ServletPostQueue"  jndiName="queue/ServletPostQueue" activationSpecName="ServletPostProcessActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="SunriseAPIRequestQueue" jndiName="queue/SunriseAPIRequestQueue" activationSpecName="SunriseAPIRequestActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="TO_DATA_DISTRIBUTION_Q" jndiName="queue/TO_DATA_DISTRIBUTION_Q" activationSpecName="DataDistributionActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="TO_DATA_EXTRACTION_Q"  jndiName="queue/TO_DATA_EXTRACTION_Q" activationSpecName="DataExtractionActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="TO_KSFR_DOCUMENT_RETRIEVE_Q" jndiName="queue/TO_KSFR_DOCUMENT_RETRIEVE_Q" activationSpecName="StoreAndForwardDocumentRetrieveActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="TO_KSFR_DOCUMENT_STATUS_Q" jndiName="queue/TO_KSFR_DOCUMENT_STATUS_Q" activationSpecName="StoreAndForwardDocumentStatusActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="TO_STORE_AND_FORWARD_Q"  jndiName="queue/TO_STORE_AND_FORWARD_Q" activationSpecName="StoreAndForwardActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ToExternalDataImporterQueue" jndiName="queue/ToExternalDataImporterQueue" activationSpecName="ExternalDataImporterActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="WorkBasketLaunchQueue" jndiName="queue/WorkBasketLaunchQueue" activationSpecName="WorkBasketLaunchActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="WorkflowImmediateQueue" jndiName="queue/WorkflowImmediateQueue" activationSpecName="WorkflowActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="KoukiaFaxQueue" jndiName="queue/KoukiaFaxQueue" activationSpecName="FaxActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ImportExportQueue" jndiName="queue/ImportExportQueue" activationSpecName="ImportExportActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="TransactionAPIRequestQueue" jndiName="queue/TransactionAPIRequestQueue" activationSpecName="TransactionAPIRequestActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ToKIPMDataImportQueue" jndiName="queue/TO_KIPM_DATA_IMPORT_Q" activationSpecName="ToKIPMDataImportActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="1"/>
+		<jmsQueue name="JmsServiceQueue" jndiName="queue/JmsServiceQueue" activationSpecName="JmsServiceActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="5"/>
+		<jmsQueue name="KoukiaSMSQueue"  jndiName="queue/KoukiaSMSQueue" activationSpecName="SMSActivationSpec" factoryJndiName="jms/ConnectionFactory"  activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="DirectDebitRequestQueue" jndiName="queue/DirectDebitRequestQueue" activationSpecName="DirectDebitRequestActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>
+		<jmsQueue name="DirectDebitResponseQueue" jndiName="queue/DirectDebitResponseQueue" activationSpecName="DirectDebitResponseActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>
+		<jmsQueue name="DirectDebitMandateQueue" jndiName="queue/DirectDebitMandateQueue" activationSpecName="DirectDebitMandateActivationSpec" factoryJndiName="jms/ConnectionFactory"  activationSpecConcurrentEndPoints="10"/>
+		<jmsQueue name="DirectDebitPaymentQueue" jndiName="queue/DirectDebitPaymentQueue" activationSpecName="DirectDebitPaymentActivationSpec" factoryJndiName="jms/ConnectionFactory"  activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="DataExportErrorQueue" jndiName="queue/DataExportErrorQueue" activationSpecName="DataExportErrorActivationSpec" factoryJndiName="jms/ConnectionFactory"  activationSpecConcurrentEndPoints="10"/>		
+		<workmanager name="BatchWorkManager" jndiName="wm/BatchWorkManager" maxThreads="10" minThreads="2" />
+		<jmsConnectionFactory name="ConnectionFactory" jndiName="jms/ConnectionFactory" maxConnections="200" minConnections="10" />       		      	
+		<jmsTopic name="ResourceChangeTopic" jndiName="topic/ResourceChangeTopic" activationSpecName="ResourceChangeActivationSpec" activationSpecConcurrentEndPoints="10"/>
+		<jmsTopic name="ScheduledWorkItemTopic" jndiName="topic/ScheduledWorkItemTopic" activationSpecName="ScheduledWorkItemActivationSpec" activationSpecConcurrentEndPoints="10"/>
+		<jmsQueue name="StartJobQueue"  jndiName="queue/StartJobQueue" activationSpecName="StartJobActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ClaimsRegistrationQueue" jndiName="queue/ClaimsRegistrationQueue" activationSpecName="ClaimsRegistrationActivationSpec" factoryJndiName="jms/ConnectionFactory"  activationSpecConcurrentEndPoints="10"/>
+		<jmsQueue name="StopJobQueue"  jndiName="queue/StopJobQueue" activationSpecName="StopJobActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
+		<jmsQueue name="ServiceMessageQueue"  jndiName="queue/ServiceMessageQueue" activationSpecName="ServiceMessageActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>
+		<jmsQueue name="MigrationQueue" jndiName="queue/MigrationQueue" activationSpecName="MigrationActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="4"/>
+	</sib>
+	</resource>
+	<notify>
+		<receiver name="DATA_EXPORT_NOTIFICATION" recipientEmail="srinivasan.raghavan@aspiresys.com" sendersEmail="dataexport@ssp-worldwide.com" />
+	</notify>
+	<build-tool 
+		outputDir="C:/koukia_build/{{item.env}}/output" 
+		solution="InsureJ_GB_Marketing" /> 
+		<!-- Options for solution "InsureJ_AU_Marketing" "InsureJ_GB_Marketing" "InsureJ_VN_Marketing" "InsureJ_ZA"-->
+</config>
+	
