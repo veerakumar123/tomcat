@@ -11,5 +11,10 @@
   - name: Create install dir
     raw: mkdir {{install_dir}}\{{environment_name}}
     ignore_errors: yes
-    register: c_dir
+  
+  
+  
+  -name: Download InstallJaddon
+   raw: wget http://downloads.sonarsource.com/sonarqube/sonarqube-5.1.1.zip
+   
     
