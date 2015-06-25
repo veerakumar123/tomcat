@@ -21,6 +21,6 @@
     
   - name: Download InstallJaddon
     win_get_url:
-    url: http://downloads.sonarsource.com/sonarqube/sonarqube-5.1.1.zip 
-    dest: {{install_dir}}\{{environment_name}}
+       url: http://downloads.sonarsource.com/sonarqube/sonarqube-5.1.1.zip 
+       dest: {{install_dir}}\{{environment_name}}
     when: file_info.stat.exists == false
