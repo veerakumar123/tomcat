@@ -12,25 +12,27 @@
   tasks:
 
   - name: Create install dir
-    raw: mkdir {{install_dir}}\{{environment_name}}
+    raw: mkdir {{install_dir}}{{environment_name}}
     ignore_errors: yes
  
   - name: Check installjaddon exist   
-    win_stat: path={{install_dir}}\{{environment_name}}\sonarqube-5.1.1.zip
+    win_stat: path={{install_dir}}{{environment_name}}\InstallJ-AddOn.zip
     register: file_info
     
   - name: Download InstallJaddon
-    raw: wget  http://downloads.sonarsource.com/sonarqube/sonarqube-5.1.1.zip -P {{install_dir}}\{{environment_name}}
+    raw: wget  https://s3-us-west-2.amazonaws.com/aspireias/InstallJ-AddOn.zip -P {{install_dir}}{{environment_name}} --no-check-certificate
     when: file_info.stat.exists == false
 
 
   - name: Check installproperties exist
-    win_stat: path={{install_dir}}\{{environment_name}}\install.properties
+    win_stat: path={{install_dir}}{{environment_name}}\install.properties
     register: propfile_info
 
   - name: Create Install Properties
-    win_template: src=cpp.j2 dest={{install_dir}}\{{environment_name}}\install.properties
+    win_template: src=cpp.j2 dest={{install_dir}}{{environment_name}}\install.properties
     when: propfile_info.stat.exists == false
 
   - name: Extract InstallJ addon
-    raw: winrar x {{install_dir}}\{{environment_name}}\sonarqube-5.1.1.zip -Y
+    raw: 7z x {{install_dir}}{{environment_name}}\InstallJ-AddOn.zip  -o{{install_dir}}{{environment_name}} -y
+  - name: Copy Koukia Config File
+     
