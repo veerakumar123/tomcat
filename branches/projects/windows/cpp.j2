@@ -22,7 +22,7 @@ core.upgrade.names=InsureJ-Core_UpgradeKit.zip
 #client.upgrade.names=Select-LG_UpgradeKit.zip
 
 #### unzip location or build destination - files will be extracted in build.destination + "install/setup/" folder
-build.destination=C:/koukia_build/CPP/
+build.destination={{item.build_destination}}
 
 #### username and password needed to import resources and rates and refresh pe indexes - Select user to login to the system
 user=sysadmin
@@ -34,10 +34,10 @@ callAppServerDirectly=false
 #### rates xml location must end with /
 #### all rate table files must end with "_TABLE.XML"
 #### all other files in the folder will be assumed to be rates files
-ratesFolder=C:/koukia_build/CPP/Upgrade/Scripts/ratesLG/
+ratesFolder={{item.build_destination}}/Upgrade/Scripts/ratesLG/
 
 #### if creating customised package for the client, specify output folder (can be shared drive). - Keep this false on LGNightly build
-customisedPackageOutputFolder=C:/koukia_build/CPP/CPPRelease/
+customisedPackageOutputFolder={{item.build_destination}}/CPPRelease/
 
 ################################################################################################
 ###### Flags to turn off InstallJ INSTALL ALL goals (un-comment GOAL=true to turn it off) #####
