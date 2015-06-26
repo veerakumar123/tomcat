@@ -1,14 +1,14 @@
 
 - name: Deploy select application
-  hosts: windows
+  hosts: 52.8.210.189
   gather_facts: False
 
   vars: 
      environment_name: cpp_migration
-     install_dir: c:\koukia_build\
+     install_dir: c:/koukia_build/
      goals: install ALL
      log_file: build
-     build_destination: c:\koukia_build\cpp_migration
+     build_destination: c:/koukia_build/cpp_migration
      db_server_hostname: localhost
      DB_OS: WIN
      OP_DB: OPCPPVN
@@ -52,21 +52,23 @@
 
 
   - name: Check installproperties exist
-    win_stat: path={{install_dir}}{{environment_name}}\install.properties
+    win_stat: path={{install_dir}}{{environment_name}}\installProperties.properties
     register: propfile_info
 
   - name: Create Install Properties
-    win_template: src=cpp.j2 dest={{install_dir}}{{environment_name}}\install.properties
+    win_template: src=cpp.j2 dest={{install_dir}}{{environment_name}}\installProperties.properties
     with_items:
         - {build_destination: "{{build_destination}}", DOWNLOADARCHIVES: "{{DOWNLOADARCHIVES}}", EXTRACTARCHIVES: "{{EXTRACTARCHIVES}}", PROFILE: "{{PROFILE}}", CREATESERVER: "{{CREATESERVER}}", CONFIGURESERVER: "{{CONFIGURESERVER}}", DROPDATABASE: "{{DROPDATABASE}}", CREATEDATABASE: "{{CREATEDATABASE}}", POSTCREATEDATABASE: "{{POSTCREATEDATABASE}}", MIGRATEDATABASE: "{{MIGRATEDATABASE}}", EAR: "{{EAR}}", CONFIG: "{{CONFIG}}", COPYCONFIG: "{{COPYCONFIG}}", UI: "{{UI}}", COPYUI: "{{COPYUI}}", ASP: "{{ASP}}", IMPORTRESOURCES: "{{IMPORTRESOURCES}}", IMPORTRATES: "{{IMPORTRATES}}", GENERATEPROPERTIES: "{{GENERATEPROPERTIES}}", REFRESHPECONFIGINDEXES: "{{REFRESHPECONFIGINDEXES}}", CUSTOMISECLIENTRELEASEPACKAGE: "{{CUSTOMISECLIENTRELEASEPACKAGE}}"}
     ignore_errors: yes
 
   - name: Extract InstallJ addon
     raw: 7z x {{install_dir}}{{environment_name}}\InstallJ-AddOn.zip  -o{{install_dir}}{{environment_name}} -y
- 
+    when: file_info.stat.exists == false
+
   - name: Copy Koukia Config File
     win_template: src=KoukiaDeployment.config.j2 dest={{install_dir}}{{environment_name}}\KoukiaDeployment.config
     with_items:
         - {env: "{{environment_name}}", dbhost: "{{db_server_hostname}}", dbos: "{{DB_OS}}", dbuser: "{{DB_USER}}", dbpassword: "{{DB_PASSWORD}}", opdb: "{{OP_DB}}", exdb: "{{EX_DB}}"}
- 
-     
+    ignore_errors: yes 
+  - name: Running InstallJ.cmd
+    raw:  cmd /c "cd {{install_dir}}{{environment_name}}\install\setup\bin\win && InstallJ.cmd {{goals}} {{install_dir}}{{environment_name}} > {{install_dir}}{{environment_name}}\{{log_file}}.log 2>&1"
