@@ -67,6 +67,6 @@
   - name: Copy Koukia Config File
     win_template: src=KoukiaDeployment.config.j2 dest={{install_dir}}{{environment_name}}\KoukiaDeployment.config
     with_items:
-	- {env: "{{environment_name}}", dbhost: "{{db_server_hostname}}", dbos: "{{DB_OS}}", dbuser: "{{DB_USER}}", dbpassword: "{{DB_PASSWORD}}", opdb: "{{OP_DB}}", exdb: "{{EX_DB}}"}
+        - {env: "{{environment_name}}", dbhost: "{{db_server_hostname}}", dbos: "{{DB_OS}}", dbuser: "{{DB_USER}}", dbpassword: "{{DB_PASSWORD}}", opdb: "{{OP_DB}}", exdb: "{{EX_DB}}"}
  
      
