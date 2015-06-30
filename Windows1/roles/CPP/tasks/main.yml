@@ -23,7 +23,7 @@
 
   
 - name: Create Install Properties
-  win_template: src=src={{ item + ".j2" }} dest={{install_dir}}{{environment_name}}\installProperties.properties
+  win_template: src={{ item + ".j2" }} dest={{install_dir}}{{environment_name}}\installProperties.properties
   with_items:
     - Install.Prop
 
