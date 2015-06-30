@@ -1,0 +1,8 @@
+---
+# This playbook deploys SSP select into websphere 
+
+- hosts: windows
+  remote_user: root
+
+  roles:
+    - CPP

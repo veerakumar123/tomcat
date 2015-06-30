@@ -1,0 +1,39 @@
+---
+
+- name: Create install dir
+  raw: mkdir {{install_dir}}{{environment_name}}
+  ignore_errors: yes
+
+- name: Check installjaddon exist
+  win_stat: path={{install_dir}}{{environment_name}}\InstallJ-AddOn.zip
+  register: file_info
+
+- name: Download InstallJaddon
+  raw: wget  https://s3-us-west-2.amazonaws.com/aspireias/InstallJ-AddOn.zip -P {{install_dir}}{{environment_name}} --no-check-certificate
+  when: file_info.stat.exists == false
+
+- name: Check installproperties exist
+  win_stat: path={{install_dir}}{{environment_name}}\installProperties.properties
+  register: propfile_info
+  
+
+- name: Extract InstallJ addon
+  raw: 7z x {{install_dir}}{{environment_name}}\InstallJ-AddOn.zip  -o{{install_dir}}{{environment_name}} -y
+  when: file_info.stat.exists == false
+
+  
+- name: Create Install Properties
+  win_template: src=src={{ item + ".j2" }} dest={{install_dir}}{{environment_name}}\installProperties.properties
+  with_items:
+    - Install.Prop
+
+- name: Create Koukia Deployment.config
+  win_template: src=src={{ item + ".j2" }} dest={{install_dir}}{{environment_name}}\KoukiaDeployment.config
+  with_items:
+    - KoukiaDep.conf
+
+- name: Running InstallJ.cmd
+  raw:  cmd /c "cd {{install_dir}}{{environment_name}}\install\setup\bin\win && InstallJ.cmd {{goals}} {{install_dir}}{{environment_name}} > {{install_dir}}{{environment_name}}\{{log_file}}.log 2>&1"
+
+
+
