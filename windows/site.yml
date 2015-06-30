@@ -1,6 +1,5 @@
 
 - name: Deploy select application
-  hosts: 52.8.210.189
   gather_facts: False
 
   vars: 
