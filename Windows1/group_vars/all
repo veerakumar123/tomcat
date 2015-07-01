@@ -5,12 +5,12 @@ install_dir: c:/koukia_build/
 goals: install ALL
 log_file: build
 build_destination: c:/koukia_build/cpp_migration
-db_server_hostname: localhost
-DB_OS: WIN
-OP_DB: OPCPPVN
-EX_DB: EXCPPVN
-DB_USER: venkat
-DB_PASSWORD: Temp01
+dbhost: localhost
+dbos: WIN
+opdb: OPCPPVN
+exdb: EXCPPVN
+dbuser: venkat
+dbpassword: Temp01
 
 
 
