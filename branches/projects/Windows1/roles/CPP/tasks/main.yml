@@ -1,7 +1,7 @@
 ---
 
 - name: Create install dir
-  raw: mkdir {{install_dir}}{{environment_name}}
+  raw: mkdir -p {{install_dir}}{{environment_name}}
   ignore_errors: yes
 
 - name: Check installjaddon exist
@@ -26,11 +26,12 @@
   win_template: src={{ item + ".j2" }} dest={{install_dir}}{{environment_name}}\installProperties.properties
   with_items:
     - Install.Prop
-
+  ignore_errors: yes
 - name: Create Koukia Deployment.config
-  win_template: src=src={{ item + ".j2" }} dest={{install_dir}}{{environment_name}}\KoukiaDeployment.config
+  win_template: src={{ item + ".j2" }} dest={{install_dir}}{{environment_name}}\KoukiaDeployment.config
   with_items:
     - KoukiaDep.conf
+  ignore_errors: yes
 
 - name: Running InstallJ.cmd
   raw:  cmd /c "cd {{install_dir}}{{environment_name}}\install\setup\bin\win && InstallJ.cmd {{goals}} {{install_dir}}{{environment_name}} > {{install_dir}}{{environment_name}}\{{log_file}}.log 2>&1"
