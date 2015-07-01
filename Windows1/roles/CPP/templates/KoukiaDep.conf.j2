@@ -6,7 +6,7 @@
 	   	version="3.0.0_1.0.0RC4"
 	   	build="2.2.11"
 		windowsDriveLetter="C:"
-	   	installRootDir="/koukia_systems/{{env}}">
+	   	installRootDir="/koukia_systems/{{environment_name}}">
 		<!-- Component specific configuration. -->
 		<SOAComponents>
 			<component name="Attachments" info="attachments component" install="true">
@@ -44,8 +44,8 @@
 			</component>
 			<component name="SampleLocalFSDocStorage" info="Sample Local File System Document Storage" install="true">
 				<!-- FOR SSP SAMPLE SOLUTION ONLY AS A STUB. -->
-				<property name="CopyToPath" value="koukia_systems/{{env}}/DocStorage" />
-				<property name="AbsolutePath" value="C:/koukia_systems/{{env}}/DocStorage" />
+				<property name="CopyToPath" value="koukia_systems/{{environment_name}}/DocStorage" />
+				<property name="AbsolutePath" value="C:/koukia_systems/{{environment_name}}/DocStorage" />
 			</component>
    			<component name="Workflow">
    				<property name="runScheduledWorkItems" value="1" />
@@ -73,7 +73,7 @@
     </product>
 	<websphere installRoot="C:/sspsdk/IBM/WebSphere/AppServer"
 		profileInstallDir="C:/koukia_systems/was85profiles"
-		appSrvProfileName="{{env}}" 
+		appSrvProfileName="{{environment_name}}" 
 		websphereVersion="8.0"  /> <!-- version supported are 6.1 and 7.0 -->
 	
 	<databaseConfig>
@@ -145,9 +145,9 @@
 	   	host-name="$[was.appSrvProfile.hostName]"
 		host-address="$[was.appSrvProfile.hostName]"
    		httpPort="82" 
-   		sourceDir="/{{env}}"
+   		sourceDir="/{{environment_name}}"
    		env-context="Server" 
-   		environmentID="{{env}}"
+   		environmentID="{{environment_name}}"
    		local="true"/>
    		
 	<docserver host-name="crysrv1" host-address="crysrv1.koukia.com" httpPort="9291" krdbDir="devSupportKrdb" krdbDatasource="NA" docDir="devSupportDocstorage"/>
@@ -287,7 +287,7 @@
 				port ="1521"
 				dataStoreHelperClassName= "com.ibm.websphere.rsadapter.Oracle11gDataStoreHelper"/>
 		</db>
-	<sib name="{{env}}_BUS" >
+	<sib name="{{environment_name}}_BUS" >
 		<jmsQueue name="BackgroundLoggingQueue"  jndiName="queue/BackgroundLoggingQueue" activationSpecName="BackgroundLoggingActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
 		<jmsQueue name="ClaimsReinsuranceQueue"  jndiName="queue/ClaimsReinsuranceQueue" activationSpecName="ClaimsReinsuranceActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
 		<jmsQueue name="DataExportMaintenanceQueue"  jndiName="queue/DataExportMaintenanceQueue" activationSpecName="DataExportMaintenanceActivationSpec" factoryJndiName="jms/ConnectionFactory" activationSpecConcurrentEndPoints="10"/>	
@@ -343,7 +343,7 @@
 		<receiver name="DATA_EXPORT_NOTIFICATION" recipientEmail="srinivasan.raghavan@aspiresys.com" sendersEmail="dataexport@ssp-worldwide.com" />
 	</notify>
 	<build-tool 
-		outputDir="C:/koukia_build/{{env}}/output" 
+		outputDir="C:/koukia_build/{{environment_name}}/output" 
 		solution="InsureJ_GB_Marketing" /> 
 		<!-- Options for solution "InsureJ_AU_Marketing" "InsureJ_GB_Marketing" "InsureJ_VN_Marketing" "InsureJ_ZA"-->
 </config>
