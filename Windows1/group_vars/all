@@ -1,0 +1,39 @@
+# Here are variables related to Environment
+
+environment_name: cpp
+install_dir: c:/koukia_build/
+goals: install ALL
+log_file: build
+build_destination: c:/koukia_build/cpp_migration
+db_server_hostname: localhost
+DB_OS: WIN
+OP_DB: OPCPPVN
+EX_DB: EXCPPVN
+DB_USER: venkat
+DB_PASSWORD: Temp01
+
+
+
+#  Install properties
+
+DOWNLOADARCHIVES: false
+EXTRACTARCHIVES: true
+PROFILE: true
+CREATESERVER: true
+CONFIGURESERVER: true
+DROPDATABASE: true
+CREATEDATABASE: true
+POSTCREATEDATABASE: true
+MIGRATEDATABASE: true
+EAR: true
+CONFIG: true
+COPYCONFIG: true
+UI: true
+COPYUI: true
+ASP: true
+IMPORTRESOURCES: true
+IMPORTRATES: true
+GENERATEPROPERTIES: true
+REFRESHPECONFIGINDEXES: true
+CUSTOMISECLIENTRELEASEPACKAGE: true
+
