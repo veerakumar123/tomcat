@@ -1,0 +1,200 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  vars_files:
+   - config.yml
+  tasks:
+   - name: Get the current date.
+     action: shell date '+%m-%d-%Y'
+     register: CURRENT_DATE
+   - name: Create Log Files
+     action: shell touch /root/test/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+   - name: disable Sandbox new relic alerts
+     script: files/sandbox_disable.sh > /root/test/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+     when: Environment == "sandbox"
+   - name: Disable Production New relic Alerts
+     script: files/prod_disable.sh > /root/test/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+     when: Environment == "production"
+#   - name: disable web servers from Load Balancer
+#     script: /usr/bin/perl files/disable_load_balancer.pl /etc/ansible/config.yml  disabled >> /root/test/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+   - name: Display output in terminal
+     shell: /bin/cat /root/test/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+     register: catt
+   - local_action: copy content='{{catt.stdout}}' dest=/root/logs/Local_Actions.log
+
+- hosts: 10.235.220.242
+  vars_files:
+     - config.yml
+  tasks:
+   - name: Get the current date.
+     action: shell date '+%m-%d-%Y'
+     register: CURRENT_DATE
+   - name: Create backup folder
+     action: shell  mkdir -p /opt/SAT/backup/Prod_Backup_{{ CURRENT_DATE.stdout }}
+#   - name: Backup Production Database
+#     mysql_db: state=dump name=thinkronize target=/opt/SAT/backup/Prod_Backup_{{ CURRENT_DATE.stdout }}/{{ CURRENT_DATE.stdout }}_backup.sql.tz
+#   - debug: msg=currentdate -> {{CURRENT_DATE}}
+#     ignore_errors: true
+#     tags:
+#       - test
+   - name: Send email notification
+     local_action: mail msg='System {{ inventory_hostname }} database has been successfully backed up.'
+                   subject="Ansible-report"
+                   body="This databases has been backed up"
+                   from="root@knova-crt-srch.inetuhosted.net"
+                   to="veera.veluchamy@aspiresys.com"
+     ignore_errors: true
+   - name: Run flyway migration
+     command: bash /root/flyway-3.2.1/flyway migrate
+     register: flyway
+   - local_action: copy content="${{flyway.stdout}}" dest=/root/logs/Flyway_Migration_{{ CURRENT_DATE.stdout }}.log
+     tags:
+      - flyway
+
+
+- hosts: webservers
+  remote_user: root
+  vars_files:
+     - config.yml
+  tasks:
+   - nagios: action=command command=DISABLE_HOST_SVC_NOTIFICATIONS;{{ nagios_id }}
+     delegate_to: 10.239.220.254
+
+   - name: Get the current date.
+     action: shell date '+%m-%d-%Y'
+     register: CURRENT_DATE
+
+   - name: Create Log File
+     action: shell touch /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+
+   - name: Update Trunk Aams Templates 
+     template: src=templates/Aams_Trunk_Jar.j2 dest=/root/Aams_urls.txt
+     when: Rel_Type == "Trunk" and nagios_id == "knova-crt-web03"
+
+   - name: Copy Aams Utility Jars from Jenkins
+     command: wget  -N  -i /root/Aams_urls.txt -P /opt/EduDymUtility/lib/ -o /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+
+   - name: Ensure aamsutility is started
+     action: service name=aamsutility state=restarted
+
+   - name: Update RB/RC Aams Templates.........
+     template: src=templates/Aams_Jar.j2 dest=/root/Aams_urls.txt
+     when: (Rel_Type == "RC" or Rel_Type == "RB") and (nagios_id == "knova-crt-web03" )
+
+   - name: Copy Wars from Jenkins
+     command: wget  -N  -i /root/Aams_urls.txt -P /opt/EduDymUtility/lib/ -o /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+
+   - name: Ensure aamsutility is started
+     action: service name=aamsutility state=restarted
+
+   - name: SetEvn Configuration File Changes
+     copy: src=files/w03-setenv.sh dest=/usr/share/tomcat8/bin/
+     when: nagios_id == "knova-crt-web03"
+   - name: Rename Setenv File in web03..
+     command: mv /usr/share/tomcat8/bin/w03-setenv.sh /usr/share/tomcat8/bin/setenv.sh
+
+   - name: Legacy Rewrites Configuration File Changes
+     copy: src=files/00-legacy-rewrites.conf dest=/etc/httpd/conf.d/
+
+   - name: SSL Configuration Files
+     copy: src=files/ssl.conf dest=/etc/httpd/conf.d/
+
+   - name: AAMS Executor Configuration Files
+     copy: src=files/aams-executor.sh dest=/opt/AAMSUtility/bin/
+     when: nagios_id == "knova-crt-web03"
+
+   - name: CopyJar file download scripts
+     copy: src=files/download_jar.pl dest=/root/ mode=0700
+
+   - name: Copy perl file download scripts
+     copy: src=config.yml dest=/root/
+
+   - name: Download jar files
+     script: /usr/bin/perl /root/download_jar.pl /root/config.yml >> /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+
+   - name: Transfer the script
+     copy: src=files/del_files.pl dest=/root/ mode=0700
+
+   - name: Copy perl file download scripts
+     copy: src=config.yml dest=/root/
+
+   - name: Execute the script
+     script: /usr/bin/perl /root/del_files.pl /root/config.yml >> /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+
+   - name: Creates directory
+     file: path=/root/Deployment state=directory
+
+   - name: Copy wars from jenkins
+     template: src=templates/Wars_Deploy.j2 dest=/root/urls.txt
+     with_items:
+         - {Rel_Version: "{{Rel_Version}}", Rel_Type: "{{Rel_Type}}"}
+
+   - name: Copy Wars from Jenkins
+     command: wget -N -i /root/urls.txt -P /root/Deployment/ -a /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log warn=no
+
+   - name: Copy logs to Ansible
+     shell: /bin/cat /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+     register: web
+   - local_action: copy content="${{web.stdout}}" dest=/root/Webservers_Jars.log
+
+   - name: Copy Deployment script
+     copy: src=files/deploy_version.sh dest=/root/Deployment/ mode=0700
+
+   - name: Execute the script
+     command: sh /root/Deployment/deploy_version.sh {{Rel_Type}}
+     register: ps
+   - local_action: copy content="${{ps.stdout}}" dest=/root/deployment.log
+
+   - name: restart Memcahced service
+     service: name=memcached state=restarted
+
+- hosts: 10.235.220.248
+  remote_user: root
+  vars_files:
+     - config.yml
+  tasks:
+   - name: Get The Current Date
+     action: shell date '+%m-%d-%Y'
+     register: CURRENT_DATE
+
+   - name: Create Log Files
+     action: shell touch /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+
+   - name: Update Edudym Trunk Jars from jenkins
+     template: src=templates/Edudym_Trunk_Jar.j2 dest=/root/urls.txt
+     when: Rel_Type == "Trunk" 
+
+   - name: Copy Edudym Trunk JARs from Jenkins
+     command: wget  -N  -i /root/urls.txt -P /opt/EduDymUtility/lib/ -o /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+     when: Rel_Type == "Trunk"
+
+   - name: Copy Edudym Trunk logs to Ansible
+     shell: /bin/cat /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+     register: Edutrunk
+   - local_action: copy content="${{Edutrunk.stdout}}" dest=/root/logs/Edudym_Jars.log
+     when: Rel_Type == "Trunk"
+
+   - name: Ensure EdudymUtility is started
+     action: service name=edudymutility state=restarted
+     when: Rel_Type == "Trunk"
+
+   - name: Copy Edudym JARS from jenkins .........
+     template: src=templates/Edudym_Jar.j2 dest=/root/urls.txt
+     when: Rel_Type == "RC" or Rel_Type == "RB"
+
+   - name: Copy Wars from Jenkins
+     command: wget -N  -i /root/urls.txt -P /opt/EduDymUtility/lib/ -o /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+
+   - name: Copy logs to Ansible
+     shell: /bin/cat /root/AutoDeploy_{{ CURRENT_DATE.stdout }}.log
+     register: Edudym
+   - local_action: copy content="${{Edudym.stdout}}" dest=/root/Edudym_Jars.log
+
+   - name: Ensure EdudymUtility is Restarted
+     action: service name=edudymutility state=restarted
+
+
+
+
+
+   
